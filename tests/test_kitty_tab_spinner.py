@@ -111,10 +111,14 @@ class IndicatorTest(unittest.TestCase):
             self.assertEqual(module.draw_title(data), "<green>\U000f02a2 ")
             # Grey without a current status or when closed; any coloured state outranks it.
             fg._5c6370 = "<grey>"
-            other.user_vars["pinote_pr"] = "unknown"
-            self.assertEqual(module.draw_title(data), "<green>\U000f02a2 ")
-            window.user_vars["pinote_pr"] = "closed"
-            self.assertEqual(module.draw_title(data), "<grey>\U000f02a2 ")
+            fg._c678dd = "<purple>"
+            window.user_vars["pinote_pr"] = "merged"
+            for state in ("unknown", "closed"):
+                other.user_vars["pinote_pr"] = state
+                self.assertEqual(module.draw_title(data), "<purple>\U000f02a2 ")
+                del window.user_vars["pinote_pr"]
+                self.assertEqual(module.draw_title(data), "<grey>\U000f02a2 ")
+                window.user_vars["pinote_pr"] = "merged"
 
 
 if __name__ == "__main__":
