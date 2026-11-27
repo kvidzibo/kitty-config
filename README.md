@@ -12,6 +12,7 @@ may break on other versions.
 - `kitty/kitty.conf`, `kitty/tabs-left.conf`, `kitty/tabs-top.conf` — configuration
 - `kitty/open-actions.conf` — previews for clicked file links
 - `persist_kitty_session` — launcher that saves and restores the tab layout
+- `kitty_persist.desktop` — application menu entry for the launcher
 - `new_named_tab.py`, `detach_named_tab.py`, `focus_or_tab.py`, `move_or_tab.py` — kittens
 - `kitty_tab_spinner.py` — working/ready indicator, installed as `tab_bar.py`
 - `kitty/session_watcher.py`, `kitty/new_tab_title_watcher.py` — watchers loaded by the launcher
@@ -33,16 +34,18 @@ existing files with the same names, so back up your own `kitty.conf`,
 
 ```bash
 cd kitty-config
-mkdir -p ~/.config/kitty ~/.local/bin
+mkdir -p ~/.config/kitty ~/.local/bin ~/.local/share/applications
 ln -sfn "$PWD/kitty/"{kitty,tabs-left,tabs-top,open-actions}.conf ~/.config/kitty/
 ln -sfn "$PWD/"{new_named_tab,detach_named_tab,focus_or_tab,move_or_tab}.py ~/.config/kitty/
 ln -sfnT "$PWD/kitty_tab_spinner.py" ~/.config/kitty/tab_bar.py
 ln -sfnT "$PWD/scripts" ~/.config/kitty/scripts
 ln -sfn "$PWD/persist_kitty_session" ~/.local/bin/
+ln -sfn "$PWD/kitty_persist.desktop" ~/.local/share/applications/
 ```
 
 Start Kitty with `~/.local/bin/persist_kitty_session` instead of `kitty` (the
-bare name works when `~/.local/bin` is on `PATH`). The watchers and the
+bare name works when `~/.local/bin` is on `PATH`), or pick **Kitty (persist)**
+in an application launcher; that entry needs `~/.local/bin` on `PATH`. The watchers and the
 session saver load only through this launcher, so Kitty instances started any
 other way never overwrite the saved layout. Run one launcher instance at a time:
 every instance saves to the same file, and the last save wins.
