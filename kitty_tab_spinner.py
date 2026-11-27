@@ -7,8 +7,9 @@ from weakref import WeakKeyDictionary
 from kitty.fast_data_types import add_timer, get_boss
 from kitty.progress import ProgressState
 
-# Use the lower three Braille rows to align the dots with the tab text.
-FRAMES = "⠖⠲⢲⢰⣰⣠⣄⣆⡆⡖"
+# Material Design circle slices 1-8, a filling pie: Nerd Font icons as large as
+# the git logo, which Braille dots cannot be (see symbol_map in kitty.conf).
+FRAMES = "".join(map(chr, range(0xF0A9E, 0xF0AA6)))
 # Codex's native title refreshes its spinner while the TUI is working.
 CODEX_WORKING = re.compile(r"^codex [⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏] Working(?: \||$)")
 # Values: working, unread completion, or expiry time for an active completion.
@@ -16,6 +17,8 @@ STATES = WeakKeyDictionary()
 # Pinote's `pinote_pr` user variable, most urgent first. One Nerd Font icon
 # (Material Design git logo); its colour tells the states apart.
 PR_ICON = "\U000f02a2"
+# Material Design bold check, as large as the git logo, which ✓ cannot be.
+DONE_ICON = "\U000f0e1e"
 PR_COLORS = {
     "failing": "_e06c75",
     "pending": "_e5c07b",
@@ -69,7 +72,7 @@ def draw_title(data):
         elif state is None:
             return "  "
         else:
-            symbol = "✓"
+            symbol = DONE_ICON
             color = "_98c379"
     fg = data["fmt"].fg
     return f"{getattr(fg, color)}{symbol}{fg.tab} "
