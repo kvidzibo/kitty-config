@@ -21,6 +21,9 @@ PR_COLORS = {
     "pending": "_e5c07b",
     "passing": "_98c379",
     "merged": "_c678dd",
+    # No current status (not checked yet, outdated or unavailable), or closed.
+    "unknown": "_5c6370",
+    "closed": "_5c6370",
 }
 
 

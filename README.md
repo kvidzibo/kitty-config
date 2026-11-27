@@ -134,7 +134,8 @@ Each tab title has a fixed-width prefix:
   stopped, not that it succeeded.
 - With a [Pinote](https://github.com/kvidzibo/pinote) task that has a pull
   request (`pinote_pr` user variable): a git icon, red for failing checks or
-  conflicts, amber for pending, green for passing, purple for merged.
+  conflicts, amber for pending, green for passing, purple for merged, grey
+  for closed or while there is no current status.
 
 Completion bells mark the pane for attention. For Codex CLI, set under `[tui]`
 in `~/.codex/config.toml`:
