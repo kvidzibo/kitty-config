@@ -48,7 +48,8 @@ other way never overwrite the saved layout. Run one launcher instance at a time:
 every instance saves to the same file, and the last save wins.
 
 Kitty reloads `kitty.conf` automatically; **Ctrl+Shift+F5** reloads it manually.
-Restart Kitty through the launcher after changing a watcher.
+Restart Kitty through the launcher after changing a watcher or
+`allow_remote_control`; a reload does not apply either.
 
 ## Sessions
 
@@ -178,19 +179,22 @@ if the path contains spaces:
 
 It opens and focuses a new Kitty tab in the chosen folder, titled with the
 folder name, in the Kitty instance on the same X11 display. With no reachable
-instance it opens one new Kitty window without restoring saved tabs.
+instance there it opens one new Kitty window without restoring saved tabs. A set
+`KITTY_LISTEN_ON` names the instance instead; if that one is unreachable, the
+helper fails. Restart Thunar if the menu still runs the old
+command.
 
 ## Remote control
 
-`kitty.conf` sets `allow_remote_control yes` and `listen_on unix:@mykitty`; Kitty
+`kitty.conf` sets `allow_remote_control socket-only` and `listen_on unix:@mykitty`; Kitty
 appends its process ID, giving `unix:@mykitty-<pid>`. The session saver, tab
 scrolling and Thunar helper rely on this socket name.
 
-`allow_remote_control yes` is permissive: besides the socket, any program
-running inside a Kitty window, including one on a remote host over SSH, can read
-and control every pane. Use it only with hosts and programs you trust, or
-restrict it as described in Kitty's
-[remote control documentation](https://sw.kovidgoyal.net/kitty/remote-control/).
+Requests are accepted only through that socket. Programs that merely write to a
+Kitty window, such as ones on a remote host over SSH, cannot control Kitty;
+local processes that can reach the socket can read and control every pane. A
+running Kitty keeps its previous policy until it is quit and restarted. See
+Kitty's [remote control documentation](https://sw.kovidgoyal.net/kitty/remote-control/).
 
 ## Tests
 
