@@ -48,7 +48,8 @@ other way never overwrite the saved layout. Run one launcher instance at a time:
 every instance saves to the same file, and the last save wins.
 
 Kitty reloads `kitty.conf` automatically; **Ctrl+Shift+F5** reloads it manually.
-Restart Kitty through the launcher after changing a watcher.
+Restart Kitty through the launcher after changing a watcher or
+`allow_remote_control`; a reload does not apply either.
 
 ## Sessions
 
@@ -177,8 +178,10 @@ if the path contains spaces:
 ```
 
 It opens and focuses a new Kitty tab in the chosen folder, titled with the
-folder name, in the Kitty instance on the same X11 display. With no reachable
-instance it opens one new Kitty window without restoring saved tabs.
+folder name, in the Kitty instance on the same X11 display (or the one named by
+`KITTY_LISTEN_ON`). With no reachable instance it opens one new Kitty window
+without restoring saved tabs. Restart Thunar if the menu still runs the old
+command.
 
 ## Remote control
 
@@ -188,7 +191,8 @@ scrolling and Thunar helper rely on this socket name.
 
 Requests are accepted only through that socket. Programs that merely write to a
 Kitty window, such as ones on a remote host over SSH, cannot control Kitty;
-local processes that can reach the socket can read and control every pane. See
+local processes that can reach the socket can read and control every pane. A
+running Kitty keeps its previous policy until it is quit and restarted. See
 Kitty's [remote control documentation](https://sw.kovidgoyal.net/kitty/remote-control/).
 
 ## Tests
