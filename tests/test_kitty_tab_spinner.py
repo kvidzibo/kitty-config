@@ -32,7 +32,7 @@ class IndicatorTest(unittest.TestCase):
                 "indicator", Path(__file__).resolve().parents[1] / "kitty_tab_spinner.py")
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-        fg = SimpleNamespace(_704400="", _e5c07b="", _234d20="", _98c379="", _e06c75="", _c678dd="", tab="")
+        fg = SimpleNamespace(_704400="", _e5c07b="", _234d20="", _98c379="", _e06c75="", _c678dd="", _5c6370="", tab="")
         data = {"tab_id": 1, "fmt": SimpleNamespace(fg=fg)}
         with patch.object(module, "monotonic", return_value=10) as clock:
             self.assertEqual(module.draw_title(data), "  ")
@@ -78,7 +78,7 @@ class IndicatorTest(unittest.TestCase):
             self.assertEqual(module.draw_title(data), "\U000f02a2 ")
             window.user_vars["pinote_pr"] = "failing"
             self.assertEqual(module.draw_title(data), "<red>\U000f02a2 ")
-            window.user_vars["pinote_pr"] = "closed"
+            window.user_vars["pinote_pr"] = "bogus"
             other.user_vars["pinote_pr"] = "merged"
             self.assertEqual(module.draw_title(data), "<purple>\U000f02a2 ")
             window.progress.state = progress.ProgressState.indeterminate
@@ -109,6 +109,16 @@ class IndicatorTest(unittest.TestCase):
             self.assertEqual(module.draw_title(data), "<amber>\U000f02a2 ")
             other.user_vars.clear()
             self.assertEqual(module.draw_title(data), "<green>\U000f02a2 ")
+            # Grey without a current status or when closed; any coloured state outranks it.
+            fg._5c6370 = "<grey>"
+            fg._c678dd = "<purple>"
+            window.user_vars["pinote_pr"] = "merged"
+            for state in ("unknown", "closed"):
+                other.user_vars["pinote_pr"] = state
+                self.assertEqual(module.draw_title(data), "<purple>\U000f02a2 ")
+                del window.user_vars["pinote_pr"]
+                self.assertEqual(module.draw_title(data), "<grey>\U000f02a2 ")
+                window.user_vars["pinote_pr"] = "merged"
 
 
 if __name__ == "__main__":
