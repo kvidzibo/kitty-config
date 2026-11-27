@@ -182,15 +182,14 @@ instance it opens one new Kitty window without restoring saved tabs.
 
 ## Remote control
 
-`kitty.conf` sets `allow_remote_control yes` and `listen_on unix:@mykitty`; Kitty
+`kitty.conf` sets `allow_remote_control socket-only` and `listen_on unix:@mykitty`; Kitty
 appends its process ID, giving `unix:@mykitty-<pid>`. The session saver, tab
 scrolling and Thunar helper rely on this socket name.
 
-`allow_remote_control yes` is permissive: besides the socket, any program
-running inside a Kitty window, including one on a remote host over SSH, can read
-and control every pane. Use it only with hosts and programs you trust, or
-restrict it as described in Kitty's
-[remote control documentation](https://sw.kovidgoyal.net/kitty/remote-control/).
+Requests are accepted only through that socket. Programs that merely write to a
+Kitty window, such as ones on a remote host over SSH, cannot control Kitty;
+local processes that can reach the socket can read and control every pane. See
+Kitty's [remote control documentation](https://sw.kovidgoyal.net/kitty/remote-control/).
 
 ## Tests
 
