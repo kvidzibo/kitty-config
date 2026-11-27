@@ -37,7 +37,10 @@ class IndicatorTest(unittest.TestCase):
         with patch.object(module, "monotonic", return_value=10) as clock:
             self.assertEqual(module.draw_title(data), "  ")
             window.progress.state = progress.ProgressState.indeterminate
-            self.assertIn(module.draw_title(data)[0], module.FRAMES)
+            # Eight pie frames a second, in order, each followed by one space.
+            for step in range(8):
+                clock.return_value = 10 + step / 8
+                self.assertEqual(module.draw_title(data), chr(0xF0A9E + step) + " ")
             window.progress.state = None
             self.assertEqual(module.draw_title(data), "\U000f0e1e ")
             clock.return_value = 100
