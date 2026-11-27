@@ -222,5 +222,6 @@ The tests mock Kitty's Python modules; one test also runs `kitty +runpy`.
 ## License
 
 [MIT](LICENSE). `fonts/KittyTabPie.ttf` holds mirrored circle-slice glyphs from
-[Material Design Icons](https://github.com/Templarian/MaterialDesign)
-(Apache-2.0), taken from Hack Nerd Font.
+[Material Design Icons](https://github.com/Templarian/MaterialDesign), taken
+from Hack Nerd Font and licensed under
+[Apache-2.0](fonts/LICENSE-Apache-2.0.txt).
