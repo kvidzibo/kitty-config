@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Kitty (persist)
+GenericName=Terminal
+Comment=Kitty with 5min session auto-save
+TryExec=persist_kitty_session
+Exec=persist_kitty_session
+Icon=kitty
+Terminal=false
+Categories=System;TerminalEmulator;
+StartupNotify=true
+StartupWMClass=kitty
