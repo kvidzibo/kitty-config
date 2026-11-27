@@ -15,6 +15,7 @@ may break on other versions.
 - `kitty_persist.desktop` — application menu entry for the launcher
 - `new_named_tab.py`, `detach_named_tab.py`, `focus_or_tab.py`, `move_or_tab.py` — kittens
 - `kitty_tab_spinner.py` — working/ready indicator, installed as `tab_bar.py`
+- `fonts/KittyTabPie.ttf` — extra icons for that indicator; `fonts/build_tab_pie.py` rebuilds it
 - `kitty/session_watcher.py`, `kitty/new_tab_title_watcher.py` — watchers loaded by the launcher
 - `scripts/` — preview helpers, link kittens, tab scrolling, Thunar helper
 
@@ -23,6 +24,7 @@ may break on other versions.
 - Kitty 0.51+ with `kitty` and `kitten` on `PATH`
 - [Hack Nerd Font](https://www.nerdfonts.com/): the `Hack Nerd Font Mono` family (terminal font) and
   `Hack Nerd Font` (larger tab status icons)
+- `fontconfig` (`fc-cache`) to install the bundled tab icon font
 - Previews: `glow`, `less` (with `--header`), ImageMagick (`magick`); `rsvg-convert` for SVG
 - Tab scrolling (X11 only): `xinput`, `xdotool`, `xwininfo`, `stdbuf`
 
@@ -35,14 +37,19 @@ existing files with the same names, so back up your own `kitty.conf`,
 
 ```bash
 cd kitty-config
-mkdir -p ~/.config/kitty ~/.local/bin ~/.local/share/applications
+mkdir -p ~/.config/kitty ~/.local/bin ~/.local/share/applications ~/.local/share/fonts
 ln -sfn "$PWD/kitty/"{kitty,tabs-left,tabs-top,open-actions}.conf ~/.config/kitty/
 ln -sfn "$PWD/"{new_named_tab,detach_named_tab,focus_or_tab,move_or_tab}.py ~/.config/kitty/
 ln -sfnT "$PWD/kitty_tab_spinner.py" ~/.config/kitty/tab_bar.py
 ln -sfnT "$PWD/scripts" ~/.config/kitty/scripts
 ln -sfn "$PWD/persist_kitty_session" ~/.local/bin/
 ln -sfn "$PWD/kitty_persist.desktop" ~/.local/share/applications/
+ln -sfn "$PWD/fonts/KittyTabPie.ttf" ~/.local/share/fonts/
+fc-cache -f ~/.local/share/fonts
 ```
+
+Restart Kitty after installing the font. Without it, half of the working
+indicator's frames show as missing-glyph boxes.
 
 Start Kitty with `~/.local/bin/persist_kitty_session` instead of `kitty` (the
 bare name works when `~/.local/bin` is on `PATH`), or pick **Kitty (persist)**
@@ -129,8 +136,9 @@ commands find the preview helpers by name.
 
 Each tab title has a fixed-width prefix:
 
-- An animated amber pie while an agent works: a pane reports indeterminate
-  progress (OSC 9;4) or shows Codex's working title.
+- An amber pie that fills clockwise, then empties clockwise, while an agent
+  works: a pane reports indeterminate progress (OSC 9;4) or shows Codex's
+  working title.
 - A green check when it stops, until you visit the tab. Ready means the agent
   stopped, not that it succeeded.
 - With a [Pinote](https://github.com/kvidzibo/pinote) task that has a pull
@@ -213,4 +221,7 @@ The tests mock Kitty's Python modules; one test also runs `kitty +runpy`.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE). `fonts/KittyTabPie.ttf` holds mirrored circle-slice glyphs from
+[Material Design Icons](https://github.com/Templarian/MaterialDesign), taken
+from Hack Nerd Font and licensed under
+[Apache-2.0](fonts/LICENSE-Apache-2.0.txt).

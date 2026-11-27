@@ -7,9 +7,11 @@ from weakref import WeakKeyDictionary
 from kitty.fast_data_types import add_timer, get_boss
 from kitty.progress import ProgressState
 
-# Material Design circle slices 1-8, a filling pie: Nerd Font icons as large as
-# the git logo, which Braille dots cannot be (see symbol_map in kitty.conf).
-FRAMES = "".join(map(chr, range(0xF0A9E, 0xF0AA6)))
+# A pie that fills clockwise, then empties clockwise. Filling: Material Design
+# circle slices 1-8, Nerd Font icons as large as the git logo, which Braille
+# dots cannot be. Emptying: their mirror images, seven to one eighths left,
+# from fonts/KittyTabPie.ttf (see symbol_map in kitty.conf).
+FRAMES = "".join(map(chr, [*range(0xF0A9E, 0xF0AA6), *range(0x100006, 0xFFFFF, -1)]))
 # Codex's native title refreshes its spinner while the TUI is working.
 CODEX_WORKING = re.compile(r"^codex [⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏] Working(?: \||$)")
 # Values: working, unread completion, or expiry time for an active completion.

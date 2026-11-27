@@ -37,10 +37,12 @@ class IndicatorTest(unittest.TestCase):
         with patch.object(module, "monotonic", return_value=10) as clock:
             self.assertEqual(module.draw_title(data), "  ")
             window.progress.state = progress.ProgressState.indeterminate
-            # Eight pie frames a second, in order, each followed by one space.
-            for step in range(8):
-                clock.return_value = 10 + step / 8
-                self.assertEqual(module.draw_title(data), chr(0xF0A9E + step) + " ")
+            # Eight frames a second, each followed by one space: the pie fills
+            # (slices 1-8), empties (mirrored slices 7-1), then starts over.
+            frames = [*range(0xF0A9E, 0xF0AA6), *range(0x100006, 0xFFFFF, -1), 0xF0A9E]
+            for step, frame in enumerate(frames):
+                clock.return_value = 15 + step / 8
+                self.assertEqual(module.draw_title(data), chr(frame) + " ")
             window.progress.state = None
             self.assertEqual(module.draw_title(data), "\U000f0e1e ")
             clock.return_value = 100
