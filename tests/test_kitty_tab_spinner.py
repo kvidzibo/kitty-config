@@ -39,15 +39,15 @@ class IndicatorTest(unittest.TestCase):
             window.progress.state = progress.ProgressState.indeterminate
             self.assertIn(module.draw_title(data)[0], module.FRAMES)
             window.progress.state = None
-            self.assertEqual(module.draw_title(data), "✓ ")
+            self.assertEqual(module.draw_title(data), "\U000f0e1e ")
             clock.return_value = 100
-            self.assertEqual(module.draw_title(data), "✓ ")
+            self.assertEqual(module.draw_title(data), "\U000f0e1e ")
             manager.active_tab = tab
             self.assertEqual(module.draw_title(data), "  ")
             window.progress.state = progress.ProgressState.indeterminate
             module.draw_title(data)
             window.progress.state = None
-            self.assertEqual(module.draw_title(data), "✓ ")
+            self.assertEqual(module.draw_title(data), "\U000f0e1e ")
             clock.return_value = 103
             timers[-1][0](1)
             self.assertEqual(dirty, [True])
@@ -64,7 +64,7 @@ class IndicatorTest(unittest.TestCase):
                 window.title = f"codex {frame} Working | project"
                 self.assertIn(module.draw_title(data)[0], module.FRAMES)
             window.title = "codex | Ready | project"
-            self.assertEqual(module.draw_title(data), "✓ ")
+            self.assertEqual(module.draw_title(data), "\U000f0e1e ")
             manager.active_tab = tab
             self.assertEqual(module.draw_title(data), "  ")
             window.title = "other app ⠋ Working | project"
@@ -89,7 +89,7 @@ class IndicatorTest(unittest.TestCase):
             # The hidden unread check reappears once the PR status is gone, until the tab is visited.
             saved = dict(other.user_vars)
             other.user_vars.clear()
-            self.assertEqual(module.draw_title(data), "✓ ")
+            self.assertEqual(module.draw_title(data), "\U000f0e1e ")
             other.user_vars.update(saved)
             manager.active_tab = tab
             self.assertEqual(module.draw_title(data), "<purple>\U000f02a2 ")

@@ -21,7 +21,8 @@ may break on other versions.
 ## Requirements
 
 - Kitty 0.51+ with `kitty` and `kitten` on `PATH`
-- [Hack Nerd Font Mono](https://www.nerdfonts.com/) (font and the PR status icon)
+- [Hack Nerd Font](https://www.nerdfonts.com/): the `Hack Nerd Font Mono` family (terminal font) and
+  `Hack Nerd Font` (larger tab status icons)
 - Previews: `glow`, `less` (with `--header`), ImageMagick (`magick`); `rsvg-convert` for SVG
 - Tab scrolling (X11 only): `xinput`, `xdotool`, `xwininfo`, `stdbuf`
 
@@ -128,7 +129,7 @@ commands find the preview helpers by name.
 
 Each tab title has a fixed-width prefix:
 
-- Animated amber dots while an agent works: a pane reports indeterminate
+- An animated amber pie while an agent works: a pane reports indeterminate
   progress (OSC 9;4) or shows Codex's working title.
 - A green check when it stops, until you visit the tab. Ready means the agent
   stopped, not that it succeeded.
