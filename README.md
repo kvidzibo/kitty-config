@@ -178,9 +178,10 @@ if the path contains spaces:
 ```
 
 It opens and focuses a new Kitty tab in the chosen folder, titled with the
-folder name, in the Kitty instance on the same X11 display (or the one named by
-`KITTY_LISTEN_ON`). With no reachable instance it opens one new Kitty window
-without restoring saved tabs. Restart Thunar if the menu still runs the old
+folder name, in the Kitty instance on the same X11 display. With no reachable
+instance there it opens one new Kitty window without restoring saved tabs. A set
+`KITTY_LISTEN_ON` names the instance instead; if that one is unreachable, the
+helper fails. Restart Thunar if the menu still runs the old
 command.
 
 ## Remote control
