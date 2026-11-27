@@ -1,0 +1,46 @@
+#!/bin/bash
+# Launch Kitty and save shell-only snapshots every five minutes.
+ROOT=$(dirname "$(readlink -f "$0")")
+
+save_loop() {
+  local kpid=$1 tick=0 attempt
+  umask 077
+  raw=$(mktemp -d /tmp/kitty-session.XXXXXXXX) || return 1
+  stage=
+  trap 'rm -rf -- "$raw"; [ -z "$stage" ] || rm -f -- "$stage"' EXIT
+  trap 'exit 0' TERM INT
+  while sleep 5; do
+    kill -0 "$kpid" 2>/dev/null || return 0
+    tick=$((tick+1))
+    [ "$tick" -ge 60 ] || continue
+    tick=0
+    rm -f -- "$raw/session"
+    kitty @ --to "unix:@mykitty-$kpid" action save_as_session \
+      --save-only=yes "$raw/session" 2>/dev/null || continue
+    # Remote action dispatch can return before the atomic file write finishes.
+    for ((attempt=0; attempt<50; attempt++)); do
+      [ -s "$raw/session" ] && break
+      sleep 0.1
+    done
+    [ -s "$raw/session" ] || continue
+    stage=$(mktemp "$HOME/.config/kitty/.main.session.XXXXXXXX") || continue
+    if kitty +launch "$ROOT/scripts/kitty-session-shells.py" \
+      < "$raw/session" > "$stage" && [ -s "$stage" ]; then
+      mv -f -- "$stage" "$HOME/.config/kitty/main.session"
+    fi
+    rm -f -- "$stage" "$raw/session"
+    stage=
+  done
+}
+
+if [ "${1:-}" = --save-loop ]; then
+  [[ ${2:-} =~ ^[0-9]+$ ]] || exit 2
+  save_loop "$2"
+  exit
+fi
+kitty -o "watcher=$ROOT/kitty/new_tab_title_watcher.py" -o "watcher=$ROOT/kitty_tab_spinner.py" --watcher "$ROOT/kitty/session_watcher.py" &
+KPID=$!
+bash "$ROOT/persist_kitty_session" --save-loop "$KPID" &
+LOOP=$!
+wait "$KPID"
+kill "$LOOP" 2>/dev/null
